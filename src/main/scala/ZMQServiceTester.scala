@@ -4,7 +4,6 @@ object ZMQServiceTester {
   def main (args: Array[String]): Unit = {
     ZMQServiceServer.init("5000", "6000") //pushPort: 5000, //pubPort: 6000
     ZMQServiceSubscriber.init("5000", "6000")
-    println("Initialized both aspects")
 
     var msg = 0
     while (msg < 10) {
@@ -17,7 +16,7 @@ object ZMQServiceTester {
       println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
       println("--------------------------------------------------")
       msg = msg+1
-      //Thread sleep 1000
+      Thread sleep 1000
     }
     ZMQServiceServer.end()
     ZMQServiceSubscriber.end()

@@ -27,9 +27,9 @@ object ZMQServiceSubscriber {
     //creating ZMQ context which will be used for PUB and PUSH
     val context = ZMQ.context(1)
 
-    //using context to create PUSH and PUB models and binding them to sockets
-    pushClient = context.socket(ZMQ.PULL)
-    pushClient.bind("tcp://127.0.0.1:"+ pushPort)
+    //using context to create a PUB and SUB model and binding them to sockets
+//    pushClient = context.socket(ZMQ.PULL)
+//    pushClient.bind("tcp://127.0.0.1:"+ pushPort)
 
     pubClient = context.socket(ZMQ.SUB)
     pubClient.connect("tcp://127.0.0.1:"+ pubPort)
@@ -55,9 +55,9 @@ object ZMQServiceSubscriber {
     val message = pubClient.recvStr()
     println("Subscribed Message: " + message + " Topic: " + topic)
     /** publish the message again on forwardPort
-     *
+     * Mimics the Kafka broker service in a very bare bones way
      */
-    val pubMessage = message
+    val pubMessage = message //this line mimics any data processing that might take place before the data is passed on
     //setting the topic as Publisher
     forwardMessage.sendMore(topic)
     //sending the message
