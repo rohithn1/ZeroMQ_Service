@@ -1,4 +1,6 @@
 package scala
+import java.io.IOException
+
 import org.zeromq.ZMQ
 
 object ZMQServiceSubscriber {
@@ -15,7 +17,7 @@ object ZMQServiceSubscriber {
     pushClient.bind("tcp://127.0.0.1:"+ pushPort)
 
     pubClient = context.socket(ZMQ.SUB)
-    pubClient.bind("tcp://127.0.0.1:"+ pubPort)
+    pubClient.connect("tcp://127.0.0.1:"+ pubPort)
     pubClient.subscribe("Publisher".getBytes(ZMQ.CHARSET))
 
 //    /**
@@ -47,7 +49,7 @@ object ZMQServiceSubscriber {
     pushClient.bind("tcp://127.0.0.1:"+ pushPort)
 
     pubClient = context.socket(ZMQ.SUB)
-    pubClient.bind("tcp://127.0.0.1:"+ pubPort)
+    pubClient.connect("tcp://127.0.0.1:"+ pubPort)
     pubClient.subscribe("Publisher".getBytes(ZMQ.CHARSET))
 
     forwardMessage = context.socket(ZMQ.PUB)
@@ -78,8 +80,20 @@ object ZMQServiceSubscriber {
   }
 
   def sub (): Unit = {
-    val topic = pubClient.recvStr()
+    println("entered sub")
+    var topic: String = null
+    try {
+      topic = pubClient.recvStr()
+    } catch {
+      case e: Exception => e.printStackTrace()
+      case e: IOException => {
+        e.printStackTrace()
+        e.toString()
+      }
+    }
+    println(topic+": is topic")
     val message = pubClient.recvStr()
+    println(message+": is message")
     println("Topic: " + topic + " Pub/Sub Message: " + message)
   }
 
@@ -99,5 +113,4 @@ object ZMQServiceSubscriber {
     println(msg)
     Thread sleep 1000
   }
-
 }

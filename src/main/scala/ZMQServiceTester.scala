@@ -8,15 +8,15 @@ object ZMQServiceTester {
 
     var msg = 0
     while (msg < 10) {
-      println("while loop")
       ZMQServiceServer.push(msg)
       ZMQServiceServer.pub(msg)
-      msg = msg+1
-      println("while loop: "+msg+" going to sub pull")
-      ZMQServiceSubscriber.sub()
+      println("Server Complete")
       ZMQServiceSubscriber.pull()
+      ZMQServiceSubscriber.sub()
+      msg = msg+1
       Thread sleep 1000
     }
     ZMQServiceServer.end()
+    println("the project ended")
   }
 }

@@ -11,7 +11,7 @@ object ZMQServiceServer {
     context = ZMQ.context(1)
     //using context to create PUSH and PUB models and binding them to sockets
     pushSocket = context.socket(ZMQ.PUSH)
-    pushSocket.bind("tcp://127.0.0.1:"+ pushPort)
+    pushSocket.connect("tcp://127.0.0.1:"+ pushPort)
 
     pubSocket = context.socket(ZMQ.PUB)
     pubSocket.bind("tcp://127.0.0.1:"+ pubPort)
@@ -31,26 +31,21 @@ object ZMQServiceServer {
     /**
      * Below we are setting a topic and pushing the data
      */
-    var pushMessage = message
-      //setting the topic as Push Server
-      //pushServer.sendMore("Raw Data Pushed")
-      //sending the message
-      val msg = String.format("Update %d" + pushMessage)
+      val msg = "Update: " + message
       pushSocket.send(msg.getBytes(), 0)
-      println(msg)
+      println("Pushed: " + msg)
   }
 
   def pub (message: Int): Unit = {
     /**
      * Below we are setting a topic and publishing the data
      */
-    var pubMessage = message
     //setting the topic as Publisher
     pubSocket.sendMore("Publisher")
     //sending the message
-    val msg = String.format("Update %d" + pubMessage)
-    pubSocket.send(msg.getBytes(), 0)
-    println(msg)
+    val msg = "Update: " + message
+    pubSocket.send(msg.getBytes(ZMQ.CHARSET), 0)
+    println("Published: " + msg)
   }
 
   def end (): Unit = {
