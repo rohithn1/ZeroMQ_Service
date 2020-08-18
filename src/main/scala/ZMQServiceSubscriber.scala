@@ -3,6 +3,8 @@ import java.io.IOException
 
 import org.zeromq.ZMQ
 
+import scala.ZMQServiceServer.context
+
 object ZMQServiceSubscriber {
   var pushClient: ZMQ.Socket = _
   var pubClient: ZMQ.Socket = _
@@ -76,31 +78,19 @@ object ZMQServiceSubscriber {
 
   def pull (): Unit = {
     val message = pushClient.recvStr()
-    println("Push/Pull Message: " + message + " Topic: " + Thread.currentThread().getName)
+    println("Pulled Message: " + message /*+ " Topic: " + Thread.currentThread().getName*/)
   }
 
   def sub (): Unit = {
-    println("entered sub")
-    var topic: String = null
-    try {
-      topic = pubClient.recvStr()
-    } catch {
-      case e: Exception => e.printStackTrace()
-      case e: IOException => {
-        e.printStackTrace()
-        e.toString()
-      }
-    }
-    println(topic+": is topic")
+    val topic = pubClient.recvStr()
     val message = pubClient.recvStr()
-    println(message+": is message")
-    println("Topic: " + topic + " Pub/Sub Message: " + message)
+    println("Subscribed Message: " + message + " Topic: " + topic)
   }
 
   def forward (): Unit = {
     val topic = pubClient.recvStr()
     val message = pubClient.recvStr()
-    println("Topic: " + topic + " Pub/Sub Message: " + message)
+    println("Subscribed Message: " + message + " Topic: " + topic)
     /** publish the message again on forwardPort
      *
      */
@@ -112,5 +102,14 @@ object ZMQServiceSubscriber {
     forwardMessage.send(msg.getBytes(), 0)
     println(msg)
     Thread sleep 1000
+  }
+
+  def end (): Unit = {
+    pubClient.close()
+    pubClient.close()
+  }
+
+  def endForwarder (): Unit = {
+    forwardMessage.close()
   }
 }

@@ -49,6 +49,7 @@ object ZMQServiceServer {
   }
 
   def end (): Unit = {
-    context.close()
+    pushSocket.close()
+    pubSocket.close()
   }
 }

@@ -10,13 +10,16 @@ object ZMQServiceTester {
     while (msg < 10) {
       ZMQServiceServer.push(msg)
       ZMQServiceServer.pub(msg)
-      println("Server Complete")
+      println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
       ZMQServiceSubscriber.pull()
       ZMQServiceSubscriber.sub()
+      println("--------------------------------------------------")
+      println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+      println("--------------------------------------------------")
       msg = msg+1
-      Thread sleep 1000
+      //Thread sleep 1000
     }
     ZMQServiceServer.end()
-    println("the project ended")
+    ZMQServiceSubscriber.end()
   }
 }
