@@ -15,16 +15,6 @@ object ZMQServiceServer {
 
     pubSocket = context.socket(ZMQ.PUB)
     pubSocket.bind("tcp://127.0.0.1:"+ pubPort)
-
-    /**
-     * Below we are syncing pubServer with subscriber
-     */
-//    // Subscriber tells us when it's ready here
-//    val sync = context.socket(ZMQ.PULL)
-//    sync.bind("tcp://127.0.0.1:5564")
-//    publisher setHWM 2
-//    // Wait for synchronization request
-//    sync recv 0
   }
 
   def push (message: Int): Unit = {
